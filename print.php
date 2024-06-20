@@ -16,17 +16,24 @@
 		<main>
 					
 			<form action="" method="get">
-			<table class="c2" style="width:530px">
-			<tr><td class="c2">Печать таблицы<br />naturalobject из MySQL<br /></td></tr>
+			<table class="c2" style="width:650px">
+			<tr><td class="c2">Печать результата процедуры <br />MergeTables из MySQL<br /> для таблиц NaturalObject и Observation</td></tr>
 			</table>
 			
 			<table>
 			
 			<tr class="cH">
-				<td style="width:65px;">Ст. 1</td>
-				<td style="width:120px;">Ст. 2</td>
-				<td style="width:70px;">Ст. 3</td>
-				<td style="width:180px;">Ст. 4</td>
+				<td>id</td>
+				<td>type</td>
+				<td>galaxy</td>
+				<td>accuracy</td>
+				<td>flux</td>
+				<td>associated</td>
+				<td>notes</td>
+        <td>ntob_id</td>
+				<td>sctr_id</td>
+				<td>obj_id</td>
+				<td>pos_id</td>
 			</tr>	
 
 <?php 
@@ -39,19 +46,43 @@ try {
     die();
 }
 
-	$sqlTM="SELECT * FROM naturalobject ORDER BY id ASC";  // ASC - по возрастанию; DESC - по убыванию.
-//echo $sqlTM;
-	$stmt = $pdoSet->query($sqlTM);
-	$resultMF = $stmt->fetchAll();
-	
-//var_dump($resultMF);
-	for($iC=0; $iC<Count($resultMF); $iC++) {
-		?><tr><?php
-		for($iR=0; $iR<4; $iR++) {
-			?><td><?php echo $resultMF[$iC][$iR];?></td><?php
-		}
-		?></tr><?php
-	}
+	// $sqlTM="SELECT * FROM naturalobject ORDER BY id ASC";  // ASC - по возрастанию; DESC - по убыванию.
+  // $stmt = $pdoSet->query($sqlTM);
+	// $resultMF = $stmt->fetchAll();
+
+  $table1_name = 'NaturalObject';
+  $table2_name = 'Observation';
+
+  $resultMF = []; // Инициализация переменной
+
+  try {
+      // Вызов процедуры MergeTables для объединения двух таблиц для печати
+      $stmt = $pdoSet->prepare("CALL MergeTables(?, ?)");
+      $stmt->bindParam(1, $table1_name, PDO::PARAM_STR);
+      $stmt->bindParam(2, $table2_name, PDO::PARAM_STR);
+
+      $stmt->execute();
+
+      // Извлечение всех строк из результата
+      $resultMF = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  } catch (Exception $e) {
+      echo "Ошибка: " . $e->getMessage();
+  }
+
+  // Проверка, не пуст ли результат
+  if ($resultMF) {
+      // Вывод данных
+      foreach ($resultMF as $row) {
+          echo '<tr>';
+          foreach ($row as $column) {
+              echo '<td>' . htmlspecialchars($column) . '</td>';
+          }
+          echo '</tr>';
+      }
+  } else {
+      echo "Нет данных для отображения.";
+  }
 	
 ?>
 				</table>

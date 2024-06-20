@@ -72,6 +72,38 @@ INSERT INTO NaturalObject (type, galaxy, accuracy, flux, associated, notes) VALU
 ('Satellite', 'Mars', 0.82, NULL, 'None', 'Исследовательский спутник Красной планеты.');
 
 
+-- Добавляем данные в таблицу Sector
+INSERT INTO Sector (coordinates, luminous_intensity, outside_objects, object_number, unknown_object_number, detailed_object_number, notes) VALUES
+('Sector 1A', 'High', 'Asteroids', 10, 2, 5, 'Observation sector 1A'),
+('Sector 2B', 'Medium', 'Comets', 15, 1, 7, 'Observation sector 2B'),
+('Sector 3C', 'Low', 'Satellites', 8, 4, 3, 'Observation sector 3C'),
+('Sector 4D', 'Very High', 'Space debris', 20, 0, 10, 'Observation sector 4D'),
+('Sector 5E', 'Medium-High', 'Spacecraft', 12, 3, 6, 'Observation sector 5E');
+
+-- Добавляем данные в таблицу Objects
+INSERT INTO Objects (type, deter_acc, quantity, date, notes) VALUES
+('Star', 'High', 5, '2024-06-15 10:30:00', 'Observation of stars'),
+('Planet', 'Medium', 3, '2024-06-16 11:00:00', 'Observation of planets'),
+('Comet', 'Low', 7, '2024-06-17 12:45:00', 'Observation of comets'),
+('Asteroid', 'Very High', 2, '2024-06-18 09:20:00', 'Observation of asteroids'),
+('Nebula', 'High', 4, '2024-06-19 08:10:00', 'Observation of nebulas');
+
+-- Добавляем данные в таблицу Positions
+INSERT INTO Positions (earth_pos, moon_pos, sun_pos) VALUES
+('30°N, 50°E', '10°N, 20°E', '0°N, 0°E'),
+('35°N, 55°E', '15°N, 25°E', '5°N, 5°E'),
+('40°N, 60°E', '20°N, 30°E', '10°N, 10°E'),
+('45°N, 65°E', '25°N, 35°E', '15°N, 15°E'),
+('50°N, 70°E', '30°N, 40°E', '20°N, 20°E');
+
+-- Добавляем данные в таблицу Observation
+INSERT INTO Observation (ntob_id, sctr_id, obj_id, pos_id) VALUES
+(1, 1, 1, 1),
+(2, 2, 2, 2),
+(3, 3, 3, 3),
+(4, 4, 4, 4),
+(5, 5, 5, 5);
+
 
 DELIMITER //
 CREATE TRIGGER after_update_NaturalObject
@@ -85,12 +117,11 @@ END;
 //
 
 DELIMITER //
-CREATE PROCEDURE MergeTables(IN table1_name VARCHAR(255), IN table2_name VARCHAR(255))
+CREATE PROCEDURE `MergeTables`(IN table1_name VARCHAR(255), IN table2_name VARCHAR(255))
 BEGIN
     SET @sql = CONCAT('SELECT * FROM ', table1_name, ' JOIN ', table2_name, ' ON ', table1_name, '.id = ', table2_name, '.id');
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
 END;
 //
 

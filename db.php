@@ -20,6 +20,7 @@ $sqlTM = "CREATE TABLE IF NOT EXISTS naturalobject (id int(11) NOT NULL auto_inc
 $stmt = $pdoSet->query($sqlTM);
 $sqlTM = "CREATE TABLE IF NOT EXISTS files (id_file int(11) NOT NULL auto_increment, id_my int(11) NOT NULL, description text NOT NULL, name_origin text NOT NULL, path text NOT NULL, date_upload text NOT NULL, PRIMARY KEY (id_file), FOREIGN KEY (id_my) REFERENCES myarttable(id)) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=cp1251;";
 // конец кода для "неубиваемой" базы данных
+
 if (isset($_POST['bt1'])) { // Изменение проверки на POST
     $type = $_POST["type"];
     $galaxy = $_POST["galaxy"];
@@ -61,9 +62,7 @@ if (isset($_POST['bt1'])) { // Изменение проверки на POST
 	}
 }
 
-
-
-// // начало вставки для UPDATE
+// начало вставки для UPDATE
 // if (isset($_POST['id'])) {
 //     $textId = $_POST['id'];
 //     $type = $_POST['type'];
@@ -86,7 +85,7 @@ if (isset($_POST['bt1'])) { // Изменение проверки на POST
 //         echo "Ошибка: " . $e->getMessage();
 //     }
 // }
-// // конец вставки для UPDATE
+// конец вставки для UPDATE
 
 // начало вставки для UPDATE
 if (isset($_POST['id'])) {
